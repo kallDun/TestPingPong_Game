@@ -1,29 +1,36 @@
 #include "Gameplay/PlayerPlatform.h"
+#include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 
 
-// Sets default values
 APlayerPlatform::APlayerPlatform()
 {
-	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	Root = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Root"));
+	RootComponent = Root;
+	PlatformMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlatformMesh"));
+	PlatformMesh->SetupAttachment(RootComponent);
+	bReplicates = true;
+	AActor::SetReplicateMovement(true);
 }
 
-// Called when the game starts or when spawned
-void APlayerPlatform::BeginPlay()
+void APlayerPlatform::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::BeginPlay();
-	
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(APlayerPlatform, CenterPosition);
+	DOREPLIFETIME(APlayerPlatform, PlatformRelativePosition);
 }
 
-// Called every frame
-void APlayerPlatform::Tick(float DeltaTime)
+void APlayerPlatform::AddPlatformRelativePosition_Implementation(const float Value)
 {
-	Super::Tick(DeltaTime);
+	PlatformRelativePosition = FMath::Clamp(PlatformRelativePosition + Value, MinPlatformRelativePosition, MaxPlatformRelativePosition);
 }
 
-// Called to bind functionality to input
-void APlayerPlatform::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APlayerPlatform::OnRep_CenterPosition()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	SetActorLocation(CenterPosition);
 }
 
+void APlayerPlatform::OnRep_PlatformRelativePosition()
+{
+	PlatformMesh->SetRelativeLocation(FVector(0.0f, PlatformRelativePosition, 0.0f));
+}

@@ -5,6 +5,5 @@ ABall::ABall()
 {
 	bReplicates = true;
 	AActor::SetReplicateMovement(true);
-	PrimaryActorTick.bCanEverTick = true;
 }
 

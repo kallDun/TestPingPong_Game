@@ -3,6 +3,8 @@
 
 .idea/*
 PingPongTestProject.sln.DotSettings.user
+Plugins/Developer/RiderLink/Binaries/*
+Plugins/Developer/RiderLink/Intermediate/*
 
 # Compiled Object files
 *.slo

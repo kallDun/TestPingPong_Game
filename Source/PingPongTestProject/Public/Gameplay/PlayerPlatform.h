@@ -3,23 +3,46 @@
 #include <GameFramework/Pawn.h>
 #include "PlayerPlatform.generated.h"
 
-UCLASS()
+class AGoal;
+
+UCLASS(Abstract, Blueprintable, BlueprintType)
 class PINGPONGTESTPROJECT_API APlayerPlatform : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
 	APlayerPlatform();
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UStaticMeshComponent* Root;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UStaticMeshComponent* PlatformMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float MinPlatformRelativePosition;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float MaxPlatformRelativePosition;
+	
+	UPROPERTY(BlueprintReadOnly)
+	int PlayerIndex = 0;
+
+	UPROPERTY(BlueprintReadWrite, Replicated, ReplicatedUsing=OnRep_CenterPosition)
+	FVector CenterPosition;
+
+	UPROPERTY(BlueprintReadWrite, Replicated, ReplicatedUsing=OnRep_PlatformRelativePosition)
+	float PlatformRelativePosition;
+
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void AddPlatformRelativePosition(const float Value);
+	
+	UFUNCTION()
+	void OnRep_CenterPosition();
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	UFUNCTION()
+	void OnRep_PlatformRelativePosition();
 };
