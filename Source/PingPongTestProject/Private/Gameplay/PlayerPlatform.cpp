@@ -23,6 +23,13 @@ void APlayerPlatform::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 void APlayerPlatform::AddPlatformRelativePosition_Implementation(const float Value)
 {
 	PlatformRelativePosition = FMath::Clamp(PlatformRelativePosition + Value, MinPlatformRelativePosition, MaxPlatformRelativePosition);
+	PlatformMesh->SetRelativeLocation(FVector(0.0f, PlatformRelativePosition, 0.0f));
+}
+
+void APlayerPlatform::SetCenterPosition(const FVector& Value)
+{
+	CenterPosition = Value;
+	SetActorLocation(CenterPosition);
 }
 
 void APlayerPlatform::OnRep_CenterPosition()
@@ -30,7 +37,7 @@ void APlayerPlatform::OnRep_CenterPosition()
 	SetActorLocation(CenterPosition);
 }
 
-void APlayerPlatform::OnRep_PlatformRelativePosition()
+void APlayerPlatform::OnRep_PlatformRelativePosition() const
 {
 	PlatformMesh->SetRelativeLocation(FVector(0.0f, PlatformRelativePosition, 0.0f));
 }

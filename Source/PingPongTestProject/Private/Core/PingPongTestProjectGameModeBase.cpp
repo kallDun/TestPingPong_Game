@@ -35,8 +35,8 @@ void APingPongTestProjectGameModeBase::SetupPlayers()
 
 void APingPongTestProjectGameModeBase::StartNewGame() const
 {
-	PlayerPlatforms[0]->CenterPosition = FirstPlayerPosition;
-	PlayerPlatforms[1]->CenterPosition = SecondPlayerPosition;
+	PlayerPlatforms[0]->SetCenterPosition(FirstPlayerPosition);
+	PlayerPlatforms[1]->SetCenterPosition(SecondPlayerPosition);
 
 	APingPongState* PingPongState = GetGameState<APingPongState>();
 	if (PingPongState)

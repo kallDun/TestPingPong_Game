@@ -34,6 +34,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, Replicated, ReplicatedUsing=OnRep_PlatformRelativePosition)
 	float PlatformRelativePosition;
 
+public:
+	UFUNCTION()
+	void SetCenterPosition(const FVector& Value);
+
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -44,5 +48,5 @@ protected:
 	void OnRep_CenterPosition();
 
 	UFUNCTION()
-	void OnRep_PlatformRelativePosition();
+	void OnRep_PlatformRelativePosition() const;
 };
