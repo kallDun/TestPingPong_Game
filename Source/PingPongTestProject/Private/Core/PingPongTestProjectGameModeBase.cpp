@@ -18,15 +18,9 @@ void APingPongTestProjectGameModeBase::PostLogin(APlayerController* NewPlayer)
 		FString::Printf(TEXT("Player %d Post Login"), Players.Num()));
 	if (Players.Num() == 2)
 	{
-		FTimerHandle MemberTimerHandle;
-		GetWorldTimerManager().SetTimer(MemberTimerHandle, this, &APingPongTestProjectGameModeBase::DelayedInit, 1.0f, false, 1.0f);
+		SetupPlayers();
+		StartNewGame();
 	}
-}
-
-void APingPongTestProjectGameModeBase::DelayedInit()
-{
-	SetupPlayers();
-	StartNewGame();
 }
 
 void APingPongTestProjectGameModeBase::SetupPlayers()

@@ -53,9 +53,6 @@ public:
 
 protected:
 	UFUNCTION()
-	void DelayedInit();
-	
-	UFUNCTION()
 	void SetupPlayers();
 
 	UFUNCTION(BlueprintCallable)
